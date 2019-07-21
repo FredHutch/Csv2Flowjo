@@ -8,6 +8,8 @@ namespace Csv2Flowjo
     {
         const string parameterFileName = "parameterfile.txt";
         private static string path;
+        private static string[,] parameters;
+
         static void Main(string[] args)
         {
             // Read in parameters from program start.
@@ -25,18 +27,23 @@ namespace Csv2Flowjo
         {
             // Read parameters from Parameterfile.txt located in path folder.
             var items = File.ReadAllLines(path + parameterFileName);
+            int numItems = items.Count();
+
             var outFile = File.CreateText(path + outFileName);
-            string[] data = new string[1];
+            string[] itemData = new string[2];
+            parameters = new string[numItems, 2];
+            int i = 0;
 
             foreach(var item in items)
             {
-                data = item.Split(',');
-                AppendColumnToFile(outFile, data);
+                itemData = item.Split(',');
+                parameters[i, 0] = itemData[0];
+                parameters[i, 1] = itemData[1];
+                i++;
             }
-
         }
 
-        private static void AppendColumnToFile(StreamWriter outFile, string[] data)
+        private static void AppendColumnToArray(StreamWriter outFile, string[] data)
         {
             bool stop = false;
             string file = data[0];
