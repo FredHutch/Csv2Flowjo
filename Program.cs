@@ -8,14 +8,17 @@ namespace Csv2Flowjo
     class Program
     {
         const string parameterFileName = "parameterfile.txt";
+        private const int ERROR_BAD_ARGUMENTS = 10;
+        private const int ERROR_MISSING_PARAMETER_FILE = 20;
+        private const int ERROR_NO_SAMPLE_FOLDERS = 30;
 
         static void Main(string[] args)
         {
             // Read in parameters from program start.
             if (string.IsNullOrWhiteSpace(args[0]))
             {
-                Console.WriteLine("ERROR: No folder path provided.");
-                return;
+                Console.WriteLine("ERROR: No folder path argument provided.");
+                Environment.Exit(ERROR_BAD_ARGUMENTS);
             }
             string path = args[0];
 
@@ -24,6 +27,11 @@ namespace Csv2Flowjo
 
             // 2. Create list of Sample subfolders
             IEnumerable<string> sampleFolders = Directory.EnumerateDirectories(path);
+            if (sampleFolders == null)
+            {
+                Console.WriteLine($"ERROR: No sample subfolders found at {path}.");
+                Environment.Exit(ERROR_NO_SAMPLE_FOLDERS);
+            }
 
             // 3. Loop through each Sample subfolder and build sample array
             //    and write to output file with same root name as subfolder
@@ -39,7 +47,8 @@ namespace Csv2Flowjo
             string fullPath = path + parameterFileName;
             if (!File.Exists(fullPath))
             {
-                Environment.Exit(10);
+                Console.WriteLine($"ERROR: Missing {parameterFileName} file at {path}.");
+                Environment.Exit(ERROR_MISSING_PARAMETER_FILE);
             }
             var items = File.ReadAllLines(fullPath);
             int numItems = items.Count();
