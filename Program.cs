@@ -8,7 +8,7 @@ namespace Csv2Flowjo
     class Program
     {
         const string parameterFileName = "parameterfile.txt";
-        const int maxSampleRows = 1000;
+        const int maxSampleRows = 10000;
         private const int ERROR_BAD_ARGUMENTS = 10;
         private const int ERROR_MISSING_PARAMETER_FILE = 20;
         private const int ERROR_NO_SAMPLE_FOLDERS = 30;
