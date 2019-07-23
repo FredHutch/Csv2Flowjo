@@ -47,11 +47,14 @@ namespace Csv2Flowjo
 
             // 3. Loop through each Sample subfolder and build sample array
             //    and write to output file with same root name as subfolder
+            int i = 0;
             foreach (string sampleFolder in sampleFolders)
             {
                 Array.Clear(output, 0, sampleElementCount*maxSampleRows);
                 ProcessSampleFolder(sampleFolder, parameters, ref output);
+                i++;
             }
+            Console.WriteLine($"Processed {i} samples for the experiment at {path}.");
         }
         private static void ProcessSampleFolder(string sampleFolder, string[,] parameters, ref string[,] output)
         {
@@ -63,7 +66,9 @@ namespace Csv2Flowjo
             {
                 file = parameters[i, 0];
                 column = parameters[i, 1];
-                completeFilePath = sampleFolder + "\\" + file + ".csv";
+                // Use Path.Combine instead of 
+                //completeFilePath = sampleFolder + "\\" + file + ".csv";
+                completeFilePath = Path.Combine(sampleFolder, file) + ".csv";
 
                 if (File.Exists(completeFilePath))
                 {
@@ -146,7 +151,7 @@ namespace Csv2Flowjo
         private static string[,] ReadParameters(string path)
         {
             // Read parameters from Parameterfile.txt located in path folder.
-            string fullPath = path + "\\" + parameterFileName;
+            string fullPath = Path.Combine(path,parameterFileName);
             if (!File.Exists(fullPath))
             {
                 Console.WriteLine($"ERROR: Missing {parameterFileName} file at {path}.");
