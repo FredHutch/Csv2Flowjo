@@ -64,9 +64,9 @@ namespace Csv2Flowjo
 
                 if (File.Exists(file))
                 {
-                    ProcessSampleFile(sampleFolder + file, column, i, ref output);
+                    ProcessSampleFile(column, i, ref output);
                     List<string> outputList = ConvertArrayToList(output);
-                    outLines = new string[output.GetLength()];
+                    ExportOutput(sampleFolder + file, outputList);
                 }
                 else
                 {
@@ -79,12 +79,16 @@ namespace Csv2Flowjo
         private static List<string> ConvertArrayToList(string[,] output)
         {
             List<string> outputFile = new List<string>();
+            // ----------------------------------------
+            // TODO:
             // convert array row into delimited string
             // and copy list to outputFile
-            //outputFile.Add(String.Join(",", ));
+            // outputFile.Add(String.Join(",", ));
+            // ----------------------------------------
+            return outputFile;
         }
 
-        private static void ProcessSampleFile(string fullPath, string column, int colNum, ref string[,] output)
+        private static void ProcessSampleFile(string column, int colNum, ref string[,] output)
         {
             //Open File for reading
             string[] records = File.ReadAllLines(fullPath);
@@ -110,9 +114,9 @@ namespace Csv2Flowjo
             }
         }
 
-        private static void ExportOutput(string fullPath, string[,] output)
+        private static void ExportOutput(string fullPath, List<string> outputList)
         {
-            File.WriteAllLines(fullPath + ".csv", output.);
+            File.WriteAllLines(fullPath + ".csv", outputList);
         }
 
         private static string[,] ReadParameters(string path)
