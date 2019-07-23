@@ -29,6 +29,7 @@ namespace Csv2Flowjo
                 Environment.Exit(ERROR_BAD_ARGUMENTS);
             }
             path = args[0];
+            Console.WriteLine($"Processing files for the experiment at {path}.");
 
             // 1. Read parameters into parameters array
             string[,] parameters = ReadParameters(path);
@@ -50,11 +51,12 @@ namespace Csv2Flowjo
             int i = 0;
             foreach (string sampleFolder in sampleFolders)
             {
+                Console.WriteLine($"Processing files found in {sampleFolder}.");
                 Array.Clear(output, 0, sampleElementCount*maxSampleRows);
                 ProcessSampleFolder(sampleFolder, parameters, ref output);
                 i++;
             }
-            Console.WriteLine($"Processed {i} samples for the experiment at {path}.");
+            Console.WriteLine($"Processed {i} sample folders for the experiment.");
         }
         private static void ProcessSampleFolder(string sampleFolder, string[,] parameters, ref string[,] output)
         {
