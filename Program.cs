@@ -46,16 +46,14 @@ namespace Csv2Flowjo
             foreach (string sampleFolder in sampleFolders)
             {
                 output.Initialize();
-                FillOutput(sampleFolder, parameters, ref output);
-                ExportOutput(sampleFolder, output);
+                ProcessSampleFolder(sampleFolder, parameters, ref output);
             }
         }
 
-        private static void FillOutput(string sampleFolder, string[,] parameters, ref string[,] output)
+        private static void ProcessSampleFolder(string sampleFolder, string[,] parameters, ref string[,] output)
         {
             string file;
             string column;
-            string[] outLines;
            
             for (int i = 0; i < sampleElementCount; i++)
             {
@@ -64,7 +62,7 @@ namespace Csv2Flowjo
 
                 if (File.Exists(file))
                 {
-                    ProcessSampleFile(column, i, ref output);
+                    ProcessSampleFile(file, column, i, ref output);
                     List<string> outputList = ConvertArrayToList(output);
                     ExportOutput(sampleFolder + file, outputList);
                 }
@@ -79,19 +77,27 @@ namespace Csv2Flowjo
         private static List<string> ConvertArrayToList(string[,] output)
         {
             List<string> outputFile = new List<string>();
-            // ----------------------------------------
-            // TODO:
-            // convert array row into delimited string
-            // and copy list to outputFile
-            // outputFile.Add(String.Join(",", ));
-            // ----------------------------------------
+            string line = string.Empty;
+
+            for (int i = 0; i < output.GetLength(1); i++)
+            {
+                for (int j = 0; j < output.GetLength(0); j++)
+                {
+                    line += $"{output[i, j]}, "; 
+                }
+                if (line.Length > 0)
+                {
+                    line = line.Substring(0, line.Length - 2);
+                }
+                outputFile.Add(line);
+            }
             return outputFile;
         }
 
-        private static void ProcessSampleFile(string column, int colNum, ref string[,] output)
+        private static void ProcessSampleFile(string fileName, string column, int colNum, ref string[,] output)
         {
             //Open File for reading
-            string[] records = File.ReadAllLines(fullPath);
+            string[] records = File.ReadAllLines(fileName);
 
             // Get Header
             string[] header = records[3].Split(",");
@@ -144,25 +150,5 @@ namespace Csv2Flowjo
             }
             return _parameters;
         }
-
-        //private static void AppendColumnToArray(StreamWriter outFile, string[] data)
-        //{
-        //    bool stop = false;
-        //    string file = data[0];
-
-        //    if (File.Exists(path + file))
-        //    {
-        //        while (!stop)
-        //        {
-
-        //        }
-        //    }
-        //    else
-        //    {
-        //        outFile
-        //    }
-
-
-        //}
     }
 }
