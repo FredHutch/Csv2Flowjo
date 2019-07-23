@@ -8,13 +8,17 @@ namespace Csv2Flowjo
     class Program
     {
         const string parameterFileName = "parameterfile.txt";
-        const int maxSampleRows = 200;
+        const int maxSampleRows = 1000;
         private const int ERROR_BAD_ARGUMENTS = 10;
         private const int ERROR_MISSING_PARAMETER_FILE = 20;
         private const int ERROR_NO_SAMPLE_FOLDERS = 30;
         private const int ERROR_FILE_DOES_NOT_EXIST = 40;
+        private const int ERROR_COLUMN_NOT_FOUND = 50;
+        private const int ERROR_BAD_PARAMETER = 60;
 
         private static int sampleElementCount;
+        private static string path;
+        private static int recordCount;
 
         static void Main(string[] args)
         {
@@ -24,13 +28,13 @@ namespace Csv2Flowjo
                 Console.WriteLine("ERROR: No folder path argument provided.");
                 Environment.Exit(ERROR_BAD_ARGUMENTS);
             }
-            string path = args[0];
+            path = args[0];
 
             // 1. Read parameters into parameters array
             string[,] parameters = ReadParameters(path);
             sampleElementCount = parameters.GetLength(0);
 
-            //Now create an array
+            //Now create the output array
             string[,] output = new string[sampleElementCount, maxSampleRows];
 
             // 2. Create list of Sample subfolders
@@ -45,26 +49,25 @@ namespace Csv2Flowjo
             //    and write to output file with same root name as subfolder
             foreach (string sampleFolder in sampleFolders)
             {
-                output.Initialize();
+                Array.Clear(output, 0, sampleElementCount*maxSampleRows);
                 ProcessSampleFolder(sampleFolder, parameters, ref output);
             }
         }
-
         private static void ProcessSampleFolder(string sampleFolder, string[,] parameters, ref string[,] output)
         {
             string file;
             string column;
+            string completeFilePath;
            
             for (int i = 0; i < sampleElementCount; i++)
             {
                 file = parameters[i, 0];
                 column = parameters[i, 1];
+                completeFilePath = sampleFolder + "\\" + file + ".csv";
 
-                if (File.Exists(file))
+                if (File.Exists(completeFilePath))
                 {
-                    ProcessSampleFile(file, column, i, ref output);
-                    List<string> outputList = ConvertArrayToList(output);
-                    ExportOutput(sampleFolder + file, outputList);
+                    ProcessSampleFile(completeFilePath, column.Trim(), i, ref output);
                 }
                 else
                 {
@@ -72,6 +75,10 @@ namespace Csv2Flowjo
                     Environment.Exit(ERROR_FILE_DOES_NOT_EXIST);
                 }
             }
+
+            string completeOutputPath = sampleFolder + ".csv";
+            List<string> outputList = ConvertArrayToList(output);
+            ExportOutput(completeOutputPath, outputList);
         }
 
         private static List<string> ConvertArrayToList(string[,] output)
@@ -81,15 +88,20 @@ namespace Csv2Flowjo
 
             for (int i = 0; i < output.GetLength(1); i++)
             {
-                for (int j = 0; j < output.GetLength(0); j++)
-                {
-                    line += $"{output[i, j]}, "; 
+                // Ignore extra empty rows in array
+                if (i < recordCount)
+                { 
+                    for (int j = 0; j < output.GetLength(0); j++)
+                    {
+                        line += $"{output[j, i]}, "; 
+                    }
+                    if (line.Length > 0)
+                    {
+                        line = line.Substring(0, line.Length - 2);
+                    }
+                    outputFile.Add(line);
+                    line = string.Empty;
                 }
-                if (line.Length > 0)
-                {
-                    line = line.Substring(0, line.Length - 2);
-                }
-                outputFile.Add(line);
             }
             return outputFile;
         }
@@ -98,25 +110,31 @@ namespace Csv2Flowjo
         {
             //Open File for reading
             string[] records = File.ReadAllLines(fileName);
+            recordCount = records.Count();
 
             // Get Header
             string[] header = records[3].Split(",");
             string[] line;
             int index = Array.IndexOf(header, column);
+            if (index < 0)
+            {
+                Console.WriteLine($"ERROR: No column named {column} was found in file {fileName}.");
+                Environment.Exit(ERROR_COLUMN_NOT_FOUND);
+            }
 
             // Header column -> output 
-            output[0, colNum] = column;
+            output[colNum, 0] = column;
 
             // Iterate through file, grab the
             // column and place into output array
-            for (int i = 4; i < maxSampleRows; i++)
+            for (int i = 4; i < records.Count(); i++)
             {
                 if (string.IsNullOrWhiteSpace(records[i]))
                 {
                     break;
                 }
                 line = records[i].Split(",");
-                output[i, i - 3] = line[index];
+                output[colNum, i - 3] = line[index];
             }
         }
 
@@ -128,14 +146,30 @@ namespace Csv2Flowjo
         private static string[,] ReadParameters(string path)
         {
             // Read parameters from Parameterfile.txt located in path folder.
-            string fullPath = path + parameterFileName;
+            string fullPath = path + "\\" + parameterFileName;
             if (!File.Exists(fullPath))
             {
                 Console.WriteLine($"ERROR: Missing {parameterFileName} file at {path}.");
                 Environment.Exit(ERROR_MISSING_PARAMETER_FILE);
             }
             var items = File.ReadAllLines(fullPath);
-            int numItems = items.Count();
+            int numItems = 0;
+            foreach(var item in items)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                {
+                    continue;
+                }
+                else if(item.ToString().Contains(","))
+                {
+                    numItems++;
+                }
+                else
+                {
+                    Console.WriteLine($"ERROR: {parameterFileName} contains incomplete parameter in row {numItems+1}.");
+                    Environment.Exit(ERROR_BAD_PARAMETER);
+                }
+            }
 
             string[] _parameter = new string[2];
             string[,] _parameters = new string[numItems, 2];
@@ -143,6 +177,10 @@ namespace Csv2Flowjo
 
             foreach(var item in items)
             {
+                if (string.IsNullOrWhiteSpace(item))
+                {
+                    break;
+                }
                 _parameter = item.Split(',');
                 _parameters[i, 0] = _parameter[0];
                 _parameters[i, 1] = _parameter[1];

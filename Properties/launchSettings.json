@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Csv2Flowjo": {
+      "commandName": "Project",
+      "commandLineArgs": "L:\\kohli"
+    }
+  }
+}
