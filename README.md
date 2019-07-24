@@ -23,4 +23,4 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
 
  ## Examples:
  * Run program for experiment found in /experiment folder.
- * ```dotnet csv2flowjo.dll "/experiment"```
+ . ```dotnet csv2flowjo.dll "/experiment"```
