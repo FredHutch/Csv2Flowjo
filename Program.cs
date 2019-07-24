@@ -7,8 +7,7 @@ namespace Csv2Flowjo
 {
     class Program
     {
-        const string parameterFileName = "parameterfile.txt";
-        const int maxSampleRows = 10000;
+        private const int ERROR_HELP = 5;
         private const int ERROR_BAD_ARGUMENTS = 10;
         private const int ERROR_MISSING_PARAMETER_FILE = 20;
         private const int ERROR_NO_SAMPLE_FOLDERS = 30;
@@ -16,18 +15,38 @@ namespace Csv2Flowjo
         private const int ERROR_COLUMN_NOT_FOUND = 50;
         private const int ERROR_BAD_PARAMETER = 60;
 
+        private static int maxSampleRows = 10000;
+        private static string parameterFileName = "parameterfile.txt";
         private static int sampleElementCount;
         private static string path;
         private static int recordCount;
 
         static void Main(string[] args)
         {
+            bool ok = false;
+
             // Read in parameters from program start.
-            if (string.IsNullOrWhiteSpace(args[0]))
+            if (args.Length < 1 || (args.Length == 1 && args[0].ToLower() == "help"))
             {
-                Console.WriteLine("ERROR: No folder path argument provided.");
-                Environment.Exit(ERROR_BAD_ARGUMENTS);
+                Console.WriteLine("**************");
+                Console.WriteLine("* Csv2Flowjo *");
+                Console.WriteLine("**************");
+                Console.WriteLine("Takes a set of experimental sample files in folders and prepares for use with Flowjo.");
+                Console.WriteLine("Parameters (delimited with a space):");
+                Console.WriteLine("  1. Path to parent folder containing parameter file and sample subfolders. REQUIRED.");
+                Console.WriteLine("  2. Name of parameter file. OPTIONAL. If not provided, defaults to 'parameterfile.txt'.");
+                Console.WriteLine("  3. Maximum number or rows in a sample file. OPTIONAL. If not provided, defaults to 10000.");
+                Environment.Exit(ERROR_HELP);
             }
+            if (!string.IsNullOrWhiteSpace(args[1]))
+            {
+                parameterFileName = args[1];
+            }
+            if (!string.IsNullOrWhiteSpace(args[2]))
+            {
+                ok = int.TryParse(args[2], out maxSampleRows);
+            }
+
             path = args[0];
             Console.WriteLine($"Processing files for the experiment at {path}.");
 
