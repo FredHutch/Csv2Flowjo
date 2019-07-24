@@ -1,0 +1,10 @@
+Area, Area, Area
+Intensity_Mean_Ch=1_Img=1, Intensity Mean, CD68/CD163405S
+Intensity_Mean_Ch=2_Img=1, Intensity Mean, HLA-DR488
+Intensity_Mean_Ch=3_Img=1, Intensity Mean, CD45568
+Intensity_Mean_Ch=4_Img=1, Intensity Mean, Hematoxylin
+Position, Position X, Position X
+Position, Position Y, Position Y
+Sphericity, Sphericity, Sphericity
+Volume, Volume, Volume
+
