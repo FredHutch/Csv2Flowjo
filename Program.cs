@@ -23,7 +23,6 @@ namespace Csv2Flowjo
 
         static void Main(string[] args)
         {
-            bool ok = false;
             int maxTemp;
 
             // Read in parameters from program start.
