@@ -83,9 +83,8 @@ namespace Csv2Flowjo
                 }
             }
 
-            string completeOutputPath = sampleFolder + ".csv";
             List<string> outputList = ConvertArrayToList(output);
-            ExportOutput(completeOutputPath, outputList);
+            ExportOutput(sampleFolder, outputList);
         }
 
         private static List<string> ConvertArrayToList(string[,] output)
