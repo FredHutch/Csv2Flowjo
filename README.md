@@ -30,4 +30,4 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
  ```dotnet csv2flowjo.dll "/newexp" config.txt```
  * Run Csv2Flowjo for experiment found in /newexp folder using config.txt parameters file and increasing the max number of lines in any input file from default of 10000 to 50000
 
- ```dotnet csv2flowjo.dll "/newexp" config.txt``` 50000
+ ```dotnet csv2flowjo.dll "/newexp" config.txt 50000```
