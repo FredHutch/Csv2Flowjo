@@ -1,7 +1,16 @@
 # Csv2Flowjo
 Takes a set of experimental sample files in folders and prepares for use with Flowjo.
 
+# Souce Code
+* Csv2Flowjo is written in C# on the .NET Core platform. 
+* Built on .NET Core version 2.2.
+* Requires an install of Dotnet Core.
+
 # Usage
+
+ ## How to run:
+ ```dotnet csv2flowjo.dll ...parameters...```
+
  ## Command line parameters (delimited with a space):
   1. Path to parent folder containing parameter file and sample subfolders. REQUIRED.
   2. Name of parameter file. OPTIONAL. If not provided, defaults to 'parameterfile.txt'.
