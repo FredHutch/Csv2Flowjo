@@ -21,7 +21,7 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
  ## How to execute:
  ```dotnet csv2flowjo.dll <parameters>```
 
- ## Examples:
+ ### Examples:
  * Run Csv2Flowjo for experiment found in /experiment folder.
  
  ```dotnet csv2flowjo.dll "/experiment"```
