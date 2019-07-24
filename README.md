@@ -19,7 +19,7 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
   3. Name of the column to use in the output file.
 
  ## How to execute:
- ```dotnet csv2flowjo.dll ...parameters...```
+ ```dotnet csv2flowjo.dll <parameters>```
 
  ## Examples:
  * Run Csv2Flowjo for experiment found in /experiment folder.
@@ -31,3 +31,7 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
  * Run Csv2Flowjo for experiment found in /newexp folder using config.txt parameters file and increasing the max number of lines in any input file from default of 10000 to 50000
 
  ```dotnet csv2flowjo.dll "/newexp" config.txt 50000```
+ 
+ * Get help on parameters
+ 
+ ```dotnet csv2flowjo.dll``` -or- ```dotnet csv2flowjo.dll help```
