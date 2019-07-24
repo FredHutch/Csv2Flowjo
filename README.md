@@ -8,9 +8,6 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
 
 # Usage
 
- ## How to run:
- ```dotnet csv2flowjo.dll ...parameters...```
-
  ## Command line parameters (delimited with a space):
   1. Path to parent folder containing parameter file and sample subfolders. REQUIRED.
   2. Name of parameter file. OPTIONAL. If not provided, defaults to 'parameterfile.txt'.
@@ -20,3 +17,10 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
   1. Name of csv input file (do not include '.csv' since it is assumed).
   2. Name of column in the csv input file. This is the name of the column in row 4 of the file.
   3. Name of the column to use in the output file.
+
+ ## How to execute:
+ ```dotnet csv2flowjo.dll ...parameters...```
+
+ ## Examples:
+ * Run program for experiment found in /experiment folder.
+ ```dotnet csv2flowjo.dll "/experiment"```
