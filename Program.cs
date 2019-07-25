@@ -187,7 +187,7 @@ namespace Csv2Flowjo
             string fullPath = Path.Combine(path,parameterFileName);
             if (!File.Exists(fullPath))
             {
-                Console.WriteLine($"ERROR: Missing {parameterFileName} file at {path}.");
+                Console.WriteLine($"ERROR: Missing {parameterFileName} file at {path}. Note that this error could be caused by a bad path.");
                 Environment.Exit(ERROR_MISSING_PARAMETER_FILE);
             }
             var items = File.ReadAllLines(fullPath);
