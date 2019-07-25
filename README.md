@@ -25,7 +25,7 @@ Takes a set of experimental sample files in folders and prepares for use with Fl
  * Run Csv2Flowjo for experiment found in /experiment folder.
  
  ```dotnet csv2flowjo.dll "/experiment"```
- * Run Csv2Flowjo for experiment found in /newexp folder using config.txt parameters file.
+ * Run Csv2Flowjo for experiment found in /newexp folder using config.txt parameters file. Note: that path syntax may be dependent on the operating system.
 
  ```dotnet csv2flowjo.dll "../../newexp" config.txt```
  * Run Csv2Flowjo for experiment found in /newexp folder (located two folders up) using config.txt parameters file and increasing the max number of lines in any input file from default of 10000 to 50000
