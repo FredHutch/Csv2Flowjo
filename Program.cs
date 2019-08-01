@@ -121,7 +121,7 @@ namespace Csv2Flowjo
             for (int i = 0; i < output.GetLength(1); i++)
             {
                 // Ignore extra empty rows in array
-                if (i < recordCount)
+                if (i < recordCount - 3)
                 { 
                     for (int j = 0; j < output.GetLength(0); j++)
                     {
